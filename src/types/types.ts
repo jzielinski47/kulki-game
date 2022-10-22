@@ -1,11 +1,12 @@
 export interface Settings {
     width: number;
     height: number;
-    balls: number;
+
+    defaultObstacles: number;
 
     defaultSeeker: string;
     defaulWaypoint: string;
-    defaultBall: string;
+    defaultObstacleMark: string;
 }
 
 export type Tileset = string[][] | number[][]

@@ -1,4 +1,4 @@
-import { renderPlayField } from "./gameRenderer"
+import { renderDefaultBalls, renderTileset } from "./gameRenderer"
 import { Settings, Tileset } from "./types/types"
 
 const app: HTMLDivElement = document.querySelector('#app')
@@ -7,10 +7,11 @@ const colors: string[] = ['#FA6B5D', '#F79C53', '#EFC95E', '#76BD6D', '#59AAA4',
 const defaultSettings: Settings = {
     width: 9,
     height: 9,
-    balls: 2,
+    defaultObstacles: 2,
     defaultSeeker: 'S',
     defaulWaypoint: 'W',
-    defaultBall: 'X',
+    defaultObstacleMark: 'X',
 }
 
-const tileset: Tileset = renderPlayField(defaultSettings.width, defaultSettings.height)
+const tileset: Tileset = renderTileset(defaultSettings.width, defaultSettings.height)
+renderDefaultBalls(tileset, defaultSettings)

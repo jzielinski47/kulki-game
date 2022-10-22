@@ -1,4 +1,7 @@
-export function renderPlayField(width: number, height: number) {
+import { getRandomInt } from "./misc";
+import { Settings, Tileset } from "./types/types";
+
+export function renderTileset(width: number, height: number) {
     let tab = []
 
     for (let x: number = 0; x < height; x++) {
@@ -11,3 +14,14 @@ export function renderPlayField(width: number, height: number) {
     return tab;
 }
 
+export function renderDefaultBalls(tileset: Tileset, settings: Settings) {
+    for (let i = 0; i < settings.defaultObstacles; i++) {
+        let cords: number[] = [getRandomInt(settings.height), getRandomInt(settings.width)]
+
+        while (tileset[cords[0]][cords[1]] == settings.defaultObstacleMark) {
+            cords = [getRandomInt(settings.height), getRandomInt(settings.width)]
+        }
+
+        tileset[cords[0]][cords[1]] = settings.defaultObstacleMark
+    }
+}
