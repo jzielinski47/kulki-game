@@ -1,4 +1,4 @@
-import { getRandomInt } from "./misc";
+import { getRandomInt } from "./misc.js";
 export function renderTileset(width, height) {
     let tab = [];
     for (let x = 0; x < height; x++) {
@@ -17,7 +17,9 @@ export function renderDefaultBalls(tileset, settings) {
         }
         tileset[cords[0]][cords[1]] = settings.defaultObstacleMark;
     }
+    console.table(tileset)
 }
+
 export function renderBall(color) {
     const ball = document.createElement('div');
     ball.className = 'ball';

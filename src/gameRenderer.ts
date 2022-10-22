@@ -1,4 +1,4 @@
-import { getRandomInt } from "./misc";
+import { getRandomInt } from "./misc.js";
 import { Settings, Tileset } from "./types/types";
 
 export function renderTileset(width: number, height: number) {

@@ -1,5 +1,5 @@
 
-import { renderDefaultBalls, renderTileset } from "./gameRenderer"
+import { renderDefaultBalls, renderTileset } from "./gameRenderer.js"
 import { Settings, Tileset } from "./types/types"
 
 const app: HTMLDivElement = document.querySelector('#app')
@@ -8,7 +8,7 @@ const colors: string[] = ['#FA6B5D', '#F79C53', '#EFC95E', '#76BD6D', '#59AAA4',
 const defaultSettings: Settings = {
     width: 9,
     height: 9,
-    defaultObstacles: 2,
+    defaultObstacles: 3,
     defaultSeeker: 'S',
     defaulWaypoint: 'W',
     defaultObstacleMark: '#',
