@@ -7,10 +7,10 @@ const colors: string[] = ['#FA6B5D', '#F79C53', '#EFC95E', '#76BD6D', '#59AAA4',
 const defaultSettings: Settings = {
     width: 9,
     height: 9,
-    obstacles: 2,
+    balls: 2,
     defaultSeeker: 'S',
     defaulWaypoint: 'W',
-    defaultObstacle: 'X',
+    defaultBall: 'X',
 }
 
 const tileset: Tileset = renderPlayField(defaultSettings.width, defaultSettings.height)

@@ -10,3 +10,4 @@ export function renderPlayField(width: number, height: number) {
 
     return tab;
 }
+
