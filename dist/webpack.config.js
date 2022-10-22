@@ -2,7 +2,10 @@ var path = require('path');
 module.exports = {
     entry: {
         script: './src/script.ts',
-        gameRenderer: './src/gameRenderer.ts'
+        misc: './src/misc.ts',
+        pathfinding: './src/pathfinding.ts',
+        gameRenderer: './src/gameRenderer.ts',
+        types: './src/types/types.ts'
     },
     output: {
         path: path.resolve(__dirname, './dist'),
