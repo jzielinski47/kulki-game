@@ -7,7 +7,7 @@ const defaultSettings = {
     defaultObstacles: 2,
     defaultSeeker: 'S',
     defaulWaypoint: 'W',
-    defaultObstacleMark: 'X',
+    defaultObstacleMark: '#',
 };
 const tileset = renderTileset(defaultSettings.width, defaultSettings.height);
 renderDefaultBalls(tileset, defaultSettings);

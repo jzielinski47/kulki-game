@@ -1,3 +1,4 @@
+
 import { renderDefaultBalls, renderTileset } from "./gameRenderer"
 import { Settings, Tileset } from "./types/types"
 
@@ -10,7 +11,7 @@ const defaultSettings: Settings = {
     defaultObstacles: 2,
     defaultSeeker: 'S',
     defaulWaypoint: 'W',
-    defaultObstacleMark: 'X',
+    defaultObstacleMark: '#',
 }
 
 const tileset: Tileset = renderTileset(defaultSettings.width, defaultSettings.height)

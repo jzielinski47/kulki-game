@@ -25,3 +25,10 @@ export function renderDefaultBalls(tileset: Tileset, settings: Settings) {
         tileset[cords[0]][cords[1]] = settings.defaultObstacleMark
     }
 }
+
+export function renderBall(color: string) {
+    const ball: HTMLDivElement = document.createElement('div')
+    ball.className = 'ball'
+    ball.style.background = color
+    return ball
+}
