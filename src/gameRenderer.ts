@@ -14,20 +14,20 @@ export function renderTileset(width: number, height: number) {
     return tab;
 }
 
-export function renderDefaultBalls(tileset: Tileset, settings: Settings, colors: string[]) {
+export function renderDefaultBalls(tileset: Tileset, balls: Tileset, settings: Settings, colors: string[]) {
     for (let i = 0; i < settings.defaultObstacles; i++) {
         const color = colors[Math.floor(Math.random() * colors.length)]
         let cords: number[] = [getRandomInt(settings.height), getRandomInt(settings.width)]
 
-        const destination: string = tileset[cords[0]][cords[1]].toString()
-
-        while (destination.startsWith('#')) {
+        while (tileset[cords[0]][cords[1]] == settings.defaultObstacleMark) {
             cords = [getRandomInt(settings.height), getRandomInt(settings.width)]
         }
 
-        tileset[cords[0]][cords[1]] = color
+        tileset[cords[0]][cords[1]] = settings.defaultObstacleMark
+        balls[cords[0]][cords[1]] = color
     }
     console.table(tileset)
+    console.table(balls)
 }
 
 export function renderBall(color: string) {
@@ -37,7 +37,7 @@ export function renderBall(color: string) {
     return ball
 }
 
-export function display(tileset: Tileset, settings: Settings) {
+export function display(tileset: Tileset, balls: Tileset, settings: Settings) {
     const container: HTMLDivElement = document.createElement('div')
     container.className = 'tileset'
     for (let x: number = 0; x < settings.height; x++) {
@@ -46,7 +46,7 @@ export function display(tileset: Tileset, settings: Settings) {
             let tile: HTMLDivElement = document.createElement('div')
             tile.id = x + '-' + y;
             tile.classList.add('tile');
-            tile.innerHTML = tileset[x][y].toString()
+            (tileset[x][y] == '#') ? tile.append(renderBall(balls[x][y].toString())) : tile.innerHTML = tileset[x][y].toString()
 
             // tile.onclick = handleClick;
 
