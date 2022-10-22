@@ -14,7 +14,7 @@ export function renderDefaultBalls(tileset, settings, colors) {
         const color = colors[Math.floor(Math.random() * colors.length)];
         let cords = [getRandomInt(settings.height), getRandomInt(settings.width)];
         const destination = tileset[cords[0]][cords[1]].toString();
-        while (destination[0] == '#') {
+        while (destination.startsWith('#')) {
             cords = [getRandomInt(settings.height), getRandomInt(settings.width)];
         }
         tileset[cords[0]][cords[1]] = color;

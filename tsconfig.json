@@ -2,13 +2,13 @@
     "compilerOptions": {
         "rootDir": "./src",
         "outDir": "./dist",
-        "target": "ES2019",
-        "module": "ESNext",
+        "target": "ES2015",
+        "module": "ES6",
         "moduleResolution": "node",
         "lib": [
             "es6",
             "dom",
-            "es2019"
+            "ES2015"
         ]
     }
 }

@@ -1,1 +1,0 @@
-{"version":3,"file":"pathfinding.js","sourceRoot":"","sources":["../src/pathfinding.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,MAAM,aAAa,GAAG,GAAG,EAAE;IAC9B,IAAI,MAAc,EAAE,QAAgB,CAAA;IACpC,IAAI,eAAe,GAAW,CAAC,CAAC;IAChC,IAAI,KAAK,GAAY,KAAK,CAAC;IAC3B,IAAI,QAAgB,CAAC;AACzB,CAAC,CAAA"}
