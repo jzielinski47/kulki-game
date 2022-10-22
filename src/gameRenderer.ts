@@ -2,7 +2,7 @@ import { getRandomInt } from "./misc";
 import { Settings, Tileset } from "./types/types";
 
 export function renderTileset(width: number, height: number) {
-    let tab = []
+    let tab: Tileset = []
 
     for (let x: number = 0; x < height; x++) {
         tab[x] = []

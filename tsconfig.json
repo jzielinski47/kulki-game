@@ -1,13 +1,10 @@
 {
     "compilerOptions": {
-        "rootDir": "./src",
-        "outDir": "./dist",
-        "target": "es6",
-        "module": "ES2020",
-        "lib": [
-            "es6",
-            "dom",
-            "ES2017"
-        ]
+        "outDir": "./dist/",
+        "noImplicitAny": true,
+        "module": "es6",
+        "target": "es5",
+        "jsx": "react",
+        "allowJs": true
     }
 }
