@@ -1,5 +1,8 @@
-import { getRandomInt } from "./misc.js";
-export function renderTileset(width, height) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.display = exports.renderBall = exports.renderDefaultBalls = exports.renderTileset = void 0;
+const misc_js_1 = require("./misc.js");
+function renderTileset(width, height) {
     let tab = [];
     for (let x = 0; x < height; x++) {
         tab[x] = [];
@@ -9,25 +12,28 @@ export function renderTileset(width, height) {
     }
     return tab;
 }
-export function renderDefaultBalls(tileset, settings, colors) {
+exports.renderTileset = renderTileset;
+function renderDefaultBalls(tileset, settings, colors) {
     for (let i = 0; i < settings.defaultObstacles; i++) {
         const color = colors[Math.floor(Math.random() * colors.length)];
-        let cords = [getRandomInt(settings.height), getRandomInt(settings.width)];
+        let cords = [(0, misc_js_1.getRandomInt)(settings.height), (0, misc_js_1.getRandomInt)(settings.width)];
         const destination = tileset[cords[0]][cords[1]].toString();
-        while (destination[0] == '#') {
-            cords = [getRandomInt(settings.height), getRandomInt(settings.width)];
+        while (destination.startsWith('#')) {
+            cords = [(0, misc_js_1.getRandomInt)(settings.height), (0, misc_js_1.getRandomInt)(settings.width)];
         }
         tileset[cords[0]][cords[1]] = color;
     }
     console.table(tileset);
 }
-export function renderBall(color) {
+exports.renderDefaultBalls = renderDefaultBalls;
+function renderBall(color) {
     const ball = document.createElement('div');
     ball.className = 'ball';
     ball.style.background = color;
     return ball;
 }
-export function display(tileset, settings) {
+exports.renderBall = renderBall;
+function display(tileset, settings) {
     const container = document.createElement('div');
     container.className = 'tileset';
     for (let x = 0; x < settings.height; x++) {
@@ -44,3 +50,4 @@ export function display(tileset, settings) {
     }
     return container;
 }
+exports.display = display;

@@ -3,6 +3,4 @@ export const runPathfinder = () => {
     let clicksOnTileset: number = 0;
     let found: boolean = false;
     let distance: number;
-
-
 }
