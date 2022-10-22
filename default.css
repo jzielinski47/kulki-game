@@ -1,0 +1,50 @@
+:root {
+    --red: red;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body,
+html,
+#app {
+    width: 100%;
+    height: 100%;
+}
+
+#app {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tileset {
+    box-shadow: 0px 114px 46px rgba(0, 0, 0, 0.01), 0px 64px 38px rgba(0, 0, 0, 0.05), 0px 28px 28px rgba(0, 0, 0, 0.09), 0px 7px 16px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
+}
+
+.tile {
+    width: 50px;
+    height: 50px;
+    border: 1px solid black;
+    float: left;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.seeker {
+    color: white;
+    background: #6200ee;
+}
+
+.waypoint {
+    background: #ff4136;
+}
+
+.path {
+    background: yellow;
+}
