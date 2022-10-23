@@ -5,9 +5,6 @@ import { Settings, Tileset } from "./types/types"
 const app: HTMLDivElement = document.querySelector('#app')
 const colors: string[] = ['#FA6B5D', '#F79C53', '#EFC95E', '#76BD6D', '#59AAA4', '#9F82C4', '#C482BD']
 
-declare var seeker: string
-declare var waypoint: string
-
 const defaultSettings: Settings = {
     width: 9,
     height: 9,

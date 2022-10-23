@@ -1,4 +1,7 @@
 import { getRandomInt } from "./misc.js";
+let clicksOnTileset = 0;
+let found = false;
+let distance;
 export function renderTileset(width, height) {
     let tab = [];
     for (let x = 0; x < height; x++) {
@@ -42,7 +45,7 @@ export function display(tileset, balls, settings) {
             }
             else {
                 tile.innerHTML = tileset[x][y].toString();
-                tile.onclick = () => console.log('a');
+                tile.onclick = () => console.log('b');
             }
             // tile.onclick = handleClick;
             if (x != 0 && y == 0)

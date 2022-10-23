@@ -1,6 +1,10 @@
 import { getRandomInt } from "./misc.js";
 import { Settings, Tileset } from "./types/types";
 
+let clicksOnTileset: number = 0;
+let found: boolean = false;
+let distance: number;
+
 export function renderTileset(width: number, height: number) {
     let tab: Tileset = []
 
@@ -51,7 +55,7 @@ export function display(tileset: Tileset, balls: Tileset, settings: Settings) {
                 tile.onclick = () => console.log('a')
             } else {
                 tile.innerHTML = tileset[x][y].toString()
-                tile.onclick = () => console.log('a')
+                tile.onclick = () => console.log('b')
             }
 
 
