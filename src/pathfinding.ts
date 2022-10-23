@@ -4,3 +4,7 @@ export const runPathfinder = () => {
     let found: boolean = false;
     let distance: number;
 }
+
+export const selectTile = () => {
+    
+}

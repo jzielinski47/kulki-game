@@ -48,3 +48,13 @@ html,
 .path {
     background: yellow;
 }
+
+.ball {
+    width: 90%;
+    height: 90%;
+    border-radius: 50%;
+}
+
+.selected {
+    background: #4338ca;
+}
