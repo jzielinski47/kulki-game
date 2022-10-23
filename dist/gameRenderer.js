@@ -145,6 +145,7 @@ export function exploitSurrounding(tileset, seeker, finish, round, settings, col
                         document.getElementById(`${seeker[0] + offsetX}-${seeker[1] + offsetY}`).innerHTML = '';
                         document.getElementById(`${seeker[0] + offsetX}-${seeker[1] + offsetY}`).append(renderBall(color));
                         findBestRoute(seeker[0] + offsetX, seeker[1] + offsetY, distance);
+                        resetPathfinder();
                     }, 100);
             }
         }

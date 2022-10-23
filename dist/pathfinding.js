@@ -7,7 +7,35 @@ export function remove(tileset, what) {
                     case defaultSettings.defaultSeeker:
                         tileset[x][y] = defaultSettings.defaultObstacleMark;
                         break;
-                    default: tileset[x][y] = 0;
+                    case defaultSettings.defaulWaypoint:
+                        tileset[x][y] = 0;
+                        document.querySelector(x + '-' + y).innerHTML = '0';
+                        break;
+                    default:
+                        tileset[x][y] = 0;
+                        document.querySelector(x + '-' + y).innerHTML = '0';
+                        break;
+                }
+            }
+        }
+    }
+}
+export function removOnFound(tileset, what) {
+    for (let x = 0; x < tileset.length; x++) {
+        for (let y = 0; y < tileset[x].length; y++) {
+            if (tileset[x][y] == what) {
+                switch (what) {
+                    case defaultSettings.defaultSeeker:
+                        tileset[x][y] = 0;
+                        document.querySelector(x + '-' + y).innerHTML = '0';
+                        break;
+                    case defaultSettings.defaulWaypoint:
+                        tileset[x][y] = defaultSettings.defaultObstacleMark;
+                        break;
+                    default:
+                        tileset[x][y] = 0;
+                        document.querySelector(x + '-' + y).innerHTML = '0';
+                        break;
                 }
             }
         }
