@@ -39,13 +39,14 @@ html,
 }
 
 .ball {
-    width: 90%;
-    height: 90%;
+    width: 60%;
+    height: 60%;
     border-radius: 50%;
 }
 
-.seeker {
-    background: var(--seeker);
+.seeker div {
+    width: 90%;
+    height: 90%;
 }
 
 .waypoint {
