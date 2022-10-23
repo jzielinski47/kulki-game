@@ -36,7 +36,14 @@ export function display(tileset, balls, settings) {
             let tile = document.createElement('div');
             tile.id = x + '-' + y;
             tile.classList.add('tile');
-            (tileset[x][y] == '#') ? tile.append(renderBall(balls[x][y].toString())) : tile.innerHTML = tileset[x][y].toString();
+            if (tileset[x][y] == '#') {
+                tile.append(renderBall(balls[x][y].toString()));
+                tile.onclick = () => console.log('a');
+            }
+            else {
+                tile.innerHTML = tileset[x][y].toString();
+                tile.onclick = () => console.log('a');
+            }
             // tile.onclick = handleClick;
             if (x != 0 && y == 0)
                 tile.style.clear = 'both';

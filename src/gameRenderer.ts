@@ -1,5 +1,4 @@
 import { getRandomInt } from "./misc.js";
-import { runPathfinder, selectTile } from "./pathfinding.js";
 import { Settings, Tileset } from "./types/types";
 
 export function renderTileset(width: number, height: number) {
@@ -49,10 +48,12 @@ export function display(tileset: Tileset, balls: Tileset, settings: Settings) {
             tile.classList.add('tile');
             if (tileset[x][y] == '#') {
                 tile.append(renderBall(balls[x][y].toString()))
-                tile.onclick = (e) => 
+                tile.onclick = () => console.log('a')
             } else {
                 tile.innerHTML = tileset[x][y].toString()
+                tile.onclick = () => console.log('a')
             }
+
 
 
             // tile.onclick = handleClick;
@@ -65,3 +66,4 @@ export function display(tileset: Tileset, balls: Tileset, settings: Settings) {
 
     return container
 }
+
