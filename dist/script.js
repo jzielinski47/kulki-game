@@ -1,7 +1,7 @@
 import { display, renderDefaultBalls, renderTileset } from "./gameRenderer.js";
 const app = document.querySelector('#app');
 const colors = ['#FA6B5D', '#F79C53', '#EFC95E', '#76BD6D', '#59AAA4', '#9F82C4', '#C482BD'];
-const defaultSettings = {
+export const defaultSettings = {
     width: 9,
     height: 9,
     defaultObstacles: 3,

@@ -1,4 +1,5 @@
 import { getRandomInt } from "./misc.js";
+let seeker, waypoint;
 let clicksOnTileset = 0;
 let found = false;
 let distance;
@@ -41,12 +42,52 @@ export function display(tileset, balls, settings) {
             tile.classList.add('tile');
             if (tileset[x][y] == '#') {
                 tile.append(renderBall(balls[x][y].toString()));
-                tile.onclick = () => console.log('a');
+                tile.addEventListener('click', e => {
+                    const target = e.currentTarget;
+                    let seekerCords;
+                    if (clicksOnTileset == 0) {
+                        seeker = target.id;
+                        target.classList.add('seeker');
+                        seekerCords = seeker.split('-').map(item => parseInt(item));
+                        console.log(seeker);
+                        tileset[seekerCords[0]][seekerCords[1]] = 'S';
+                        clicksOnTileset++;
+                    }
+                });
             }
             else {
                 tile.innerHTML = tileset[x][y].toString();
-                tile.onclick = () => console.log('b');
+                tile.addEventListener('mouseenter', e => {
+                    const target = e.currentTarget;
+                    if (clicksOnTileset == 1) {
+                        waypoint = target.id;
+                        if (seeker != waypoint) {
+                            target.innerHTML = settings.defaulWaypoint;
+                            target.classList.add('waypoint');
+                            // clicksOnTileset++;
+                        }
+                    }
+                });
+                tile.addEventListener('mouseleave', e => {
+                    const target = e.currentTarget;
+                    if (clicksOnTileset == 1) {
+                        target.classList.remove('waypoint');
+                        target.innerHTML = '';
+                    }
+                });
+                tile.addEventListener('click', e => {
+                    const target = e.currentTarget;
+                    if (clicksOnTileset == 1) {
+                        waypoint = target.id;
+                        if (seeker != waypoint) {
+                            target.innerHTML = settings.defaulWaypoint;
+                            target.classList.add('waypoint');
+                            clicksOnTileset++;
+                        }
+                    }
+                });
             }
+            // if (clicksOnTileset == 2) searchPath(seeker, waypoint, tileset)
             // tile.onclick = handleClick;
             if (x != 0 && y == 0)
                 tile.style.clear = 'both';

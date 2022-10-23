@@ -1,5 +1,7 @@
 :root {
-    --red: red;
+    --seeker: red;
+    --waypoint: green;
+    --path: blue;
 }
 
 * {
@@ -36,25 +38,22 @@ html,
     align-items: center;
 }
 
-.seeker {
-    color: white;
-    background: #6200ee;
-}
-
-.waypoint {
-    background: #ff4136;
-}
-
-.path {
-    background: yellow;
-}
-
 .ball {
     width: 90%;
     height: 90%;
     border-radius: 50%;
 }
 
-.selected {
-    background: #4338ca;
+.seeker {
+    background: var(--seeker);
 }
+
+.waypoint {
+    background: var(--waypoint);
+}
+
+.path {
+    background: var(--path);
+}
+
+.hover {}
