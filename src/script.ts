@@ -8,13 +8,13 @@ const colors: string[] = ['#FA6B5D', '#F79C53', '#EFC95E', '#76BD6D', '#59AAA4',
 export const defaultSettings: Settings = {
     width: 9,
     height: 9,
-    defaultObstacles: 3,
+    defaultObstacles: 6,
     defaultSeeker: 'S',
     defaulWaypoint: 'W',
     defaultObstacleMark: '#',
 }
 
-const tileset: Tileset = renderTileset(defaultSettings.width, defaultSettings.height)
+export let tileset: Tileset = renderTileset(defaultSettings.width, defaultSettings.height)
 const balls: Tileset = renderTileset(defaultSettings.width, defaultSettings.height)
 renderDefaultBalls(tileset, balls, defaultSettings, colors)
 
