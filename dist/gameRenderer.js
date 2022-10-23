@@ -1,11 +1,10 @@
 import { getRandomInt } from "./misc.js";
-import { remove, removeClassName } from "./pathfinding.js";
-import { defaultSettings, tileset } from "./script.js";
+import { clearNums, remove, removeClassName } from "./pathfinding.js";
+import { balls, defaultSettings, tileset } from "./script.js";
 let seeker, waypoint;
 let clicksOnTileset = 0;
 let found = false;
 let distance;
-const tileSetCopy = tileset;
 export function renderTileset(width, height) {
     let tab = [];
     for (let x = 0; x < height; x++) {
@@ -26,8 +25,8 @@ export function renderDefaultBalls(tileset, balls, settings, colors) {
         tileset[cords[0]][cords[1]] = settings.defaultObstacleMark;
         balls[cords[0]][cords[1]] = color;
     }
-    console.table(tileset);
-    console.table(balls);
+    // console.table(tileset)
+    // console.table(balls)
 }
 export function renderBall(color) {
     const ball = document.createElement('div');
@@ -55,19 +54,19 @@ export function display(tileset, balls, settings) {
                             seeker = target.id;
                             target.classList.add('seeker');
                             seekerCords = seeker.split('-').map(item => parseInt(item));
-                            console.table(tileset);
+                            // console.table(tileset)
                             tileset[seekerCords[0]][seekerCords[1]] = defaultSettings.defaultSeeker;
+                            console.table(tileset);
                             clicksOnTileset = 1;
                         }
                         else {
                             remove(tileset, defaultSettings.defaultSeeker);
                             removeClassName('seeker');
-                            tileset[seekerCords[0]][seekerCords[1]] = defaultSettings.defaultObstacleMark;
+                            console.table(tileset);
                             seeker = '';
                             clicksOnTileset = 0;
                         }
-                        console.table(tileset);
-                        console.table(balls);
+                        // console.table(balls)
                     }
                 });
             }
@@ -78,7 +77,7 @@ export function display(tileset, balls, settings) {
                     if (clicksOnTileset == 1) {
                         waypoint = target.id;
                         if (seeker != waypoint) {
-                            target.innerHTML = settings.defaulWaypoint;
+                            // target.innerHTML = settings.defaulWaypoint;
                             target.classList.add('waypoint');
                             // clicksOnTileset++;
                             // searchPath(seeker, waypoint, tileset)
@@ -90,6 +89,7 @@ export function display(tileset, balls, settings) {
                     const cords = target.id;
                     if (clicksOnTileset == 1) {
                         target.classList.remove('waypoint');
+                        // resetPathfinder()
                         // tileset[parseInt(cords.charAt(0))][parseInt(cords.charAt(2))] = balls[parseInt(cords.charAt(0))][parseInt(cords.charAt(2))]
                         // target.innerHTML = tileSetCopy[parseInt(cords.charAt(0))][parseInt(cords.charAt(2))] as string
                     }
@@ -121,9 +121,11 @@ export function searchPath(seeker, waypoint, tileset) {
     const currentWaypoint = waypoint.split('-').map(item => parseInt(item));
     // console.log(currentStartingPoint, currentWaypoint);
     let round = 0;
-    exploitSurrounding(tileset, currentStartingPoint, currentWaypoint, round, defaultSettings);
+    const seekerColor = document.getElementById(seeker).childNodes[0].style.background;
+    console.log(seekerColor);
+    exploitSurrounding(tileset, currentStartingPoint, currentWaypoint, round, defaultSettings, seekerColor);
 }
-export function exploitSurrounding(tileset, seeker, finish, round, settings) {
+export function exploitSurrounding(tileset, seeker, finish, round, settings, color) {
     function useSingleTile(offsetX, offsetY) {
         var _a;
         let expression = (_a = tileset[seeker[0] + offsetX]) === null || _a === void 0 ? void 0 : _a[seeker[1] + offsetY];
@@ -134,13 +136,14 @@ export function exploitSurrounding(tileset, seeker, finish, round, settings) {
                 tileset[seeker[0] + offsetX][seeker[1] + offsetY] = expression;
                 // console.log(expression)
                 document.getElementById(`${seeker[0] + offsetX}-${seeker[1] + offsetY}`).innerHTML = expression.toString();
-                setTimeout(() => exploitSurrounding(tileset, [seeker[0] + offsetX, seeker[1] + offsetY], finish, round, defaultSettings), 1);
+                setTimeout(() => exploitSurrounding(tileset, [seeker[0] + offsetX, seeker[1] + offsetY], finish, round, defaultSettings, color), 1);
                 if (seeker[0] + offsetX == finish[0] && seeker[1] + offsetY == finish[1])
                     setTimeout(() => {
                         found = true;
                         distance = tileset[seeker[0] + offsetX][seeker[1] + offsetY];
-                        tileset[seeker[0] + offsetX][seeker[1] + offsetY] = settings.defaulWaypoint;
-                        document.getElementById(`${seeker[0] + offsetX}-${seeker[1] + offsetY}`).innerHTML = settings.defaulWaypoint;
+                        tileset[seeker[0] + offsetX][seeker[1] + offsetY] = balls[seeker[0]][seeker[1]];
+                        document.getElementById(`${seeker[0] + offsetX}-${seeker[1] + offsetY}`).innerHTML = '';
+                        document.getElementById(`${seeker[0] + offsetX}-${seeker[1] + offsetY}`).append(renderBall(color));
                         findBestRoute(seeker[0] + offsetX, seeker[1] + offsetY, distance);
                     }, 100);
             }
@@ -163,7 +166,7 @@ function findBestRoute(waypointX, waypointY, majorDist) {
             if (expression === dist - 1) {
                 route.push(expression);
                 document.getElementById(`${wX + offsetX}-${wY + offsetY}`).classList.add('path');
-                console.log(route);
+                // console.log(route)
                 findAvailableTile(wX + offsetX, wY + offsetY, -1, 0, dist - 1);
                 findAvailableTile(wX + offsetX, wY + offsetY, 1, 0, dist - 1);
                 findAvailableTile(wX + offsetX, wY + offsetY, 0, -1, dist - 1);
@@ -175,4 +178,14 @@ function findBestRoute(waypointX, waypointY, majorDist) {
     findAvailableTile(waypointX, waypointY, 1, 0, majorDist);
     findAvailableTile(waypointX, waypointY, 0, -1, majorDist);
     findAvailableTile(waypointX, waypointY, 0, 1, majorDist);
+}
+function resetPathfinder() {
+    found = false;
+    distance = 0;
+    clicksOnTileset = 0;
+    remove(tileset, defaultSettings.defaultSeeker);
+    removeClassName('seeker');
+    remove(tileset, defaultSettings.defaulWaypoint);
+    removeClassName('waypoint');
+    clearNums(tileset);
 }

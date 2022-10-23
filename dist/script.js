@@ -9,7 +9,8 @@ export const defaultSettings = {
     defaulWaypoint: 'W',
     defaultObstacleMark: '#',
 };
-export let tileset = renderTileset(defaultSettings.width, defaultSettings.height);
-const balls = renderTileset(defaultSettings.width, defaultSettings.height);
+export const tileset = renderTileset(defaultSettings.width, defaultSettings.height);
+export const balls = renderTileset(defaultSettings.width, defaultSettings.height);
 renderDefaultBalls(tileset, balls, defaultSettings, colors);
 app.append(display(tileset, balls, defaultSettings));
+console.table(tileset);

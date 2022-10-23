@@ -14,8 +14,9 @@ export const defaultSettings: Settings = {
     defaultObstacleMark: '#',
 }
 
-export let tileset: Tileset = renderTileset(defaultSettings.width, defaultSettings.height)
-const balls: Tileset = renderTileset(defaultSettings.width, defaultSettings.height)
+export const tileset: Tileset = renderTileset(defaultSettings.width, defaultSettings.height)
+export const balls: Tileset = renderTileset(defaultSettings.width, defaultSettings.height)
 renderDefaultBalls(tileset, balls, defaultSettings, colors)
-
 app.append(display(tileset, balls, defaultSettings))
+
+console.table(tileset)  
