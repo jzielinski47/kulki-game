@@ -1,14 +1,25 @@
 import { getRandomInt } from "./misc.js";
 import { clearNums, remove, removeClassName } from "./pathfinding.js";
-import { balls, defaultSettings, tileset } from "./script.js";
+// import { defaultSettings } from "./script.js";
 import { Settings, Tileset } from "./types/types";
+
+export const defaultSettings: Settings = {
+    width: 9,
+    height: 9,
+    defaultObstacles: 6,
+    defaultSeeker: 'S',
+    defaulWaypoint: 'W',
+    defaultObstacleMark: '#',
+}
+
+export let tileset: Tileset = renderTileset(defaultSettings.width, defaultSettings.height)
+export let balls: Tileset = renderTileset(defaultSettings.width, defaultSettings.height)
 
 let seeker: string, waypoint: string
 
 let clicksOnTileset: number = 0;
 let found: boolean = false;
 let distance: number;
-
 
 export function renderTileset(width: number, height: number) {
     let tab: Tileset = []
@@ -35,8 +46,6 @@ export function renderDefaultBalls(tileset: Tileset, balls: Tileset, settings: S
         tileset[cords[0]][cords[1]] = settings.defaultObstacleMark
         balls[cords[0]][cords[1]] = color
     }
-    // console.table(tileset)
-    // console.table(balls)
 }
 
 export function renderBall(color: string) {
@@ -64,27 +73,25 @@ export function display(tileset: Tileset, balls: Tileset, settings: Settings) {
 
                     if (clicksOnTileset < 2) {
                         if (!target.classList.contains('seeker')) {
-                            remove(tileset, defaultSettings.defaultSeeker)
+                            remove(tileset, defaultSettings.defaultSeeker, false)
                             removeClassName('seeker')
 
                             seeker = (target as HTMLDivElement).id;
                             target.classList.add('seeker')
                             seekerCords = seeker.split('-').map(item => parseInt(item))
 
-                            // console.table(tileset)
-
                             tileset[seekerCords[0]][seekerCords[1]] = defaultSettings.defaultSeeker
-                            console.table(tileset)
+
                             clicksOnTileset = 1;
                         } else {
-                            remove(tileset, defaultSettings.defaultSeeker)
+                            remove(tileset, defaultSettings.defaultSeeker, false)
                             removeClassName('seeker')
-                            console.table(tileset)
+
                             seeker = ''
                             clicksOnTileset = 0
                         }
 
-                        // console.table(balls)
+                        console.table(tileset)
 
                     }
                 })
@@ -152,6 +159,8 @@ export function searchPath(seeker: string, waypoint: string, tileset: Tileset) {
 
     let round: number = 0
     const seekerColor: string = (document.getElementById(seeker).childNodes[0] as HTMLDivElement).style.background as string
+    document.getElementById(seeker).removeChild(document.getElementById(seeker).childNodes[0])
+    remove(tileset, defaultSettings.defaultSeeker, true)
     console.log(seekerColor)
     exploitSurrounding(tileset, currentStartingPoint, currentWaypoint, round, defaultSettings, seekerColor)
 
@@ -177,12 +186,14 @@ export function exploitSurrounding(tileset: Tileset, seeker: number[], finish: n
                 if (seeker[0] + offsetX == finish[0] && seeker[1] + offsetY == finish[1]) setTimeout(() => {
                     found = true;
                     distance = tileset[seeker[0] + offsetX][seeker[1] + offsetY] as number
-                    tileset[seeker[0] + offsetX][seeker[1] + offsetY] = balls[seeker[0]][seeker[1]]
+
                     document.getElementById(`${seeker[0] + offsetX}-${seeker[1] + offsetY}`).innerHTML = ''
                     document.getElementById(`${seeker[0] + offsetX}-${seeker[1] + offsetY}`).append(renderBall(color))
+                    tileset[seeker[0] + offsetX][seeker[1] + offsetY] = defaultSettings.defaultObstacleMark
                     findBestRoute(seeker[0] + offsetX, seeker[1] + offsetY, distance)
-                    resetPathfinder()
-                }, 100)
+                    setTimeout(() => resetPathfinder(), 1000);
+
+                }, 10)
             }
         }
 
@@ -233,11 +244,12 @@ function resetPathfinder() {
     distance = 0
     clicksOnTileset = 0
 
-    remove(tileset, defaultSettings.defaultSeeker)
+    remove(tileset, defaultSettings.defaultSeeker, true)
     removeClassName('seeker')
-    remove(tileset, defaultSettings.defaulWaypoint)
+    remove(tileset, defaultSettings.defaulWaypoint, true)
     removeClassName('waypoint')
     clearNums(tileset)
 
+    setTimeout(() => removeClassName('path'), 1);
 
 }

@@ -1,11 +1,16 @@
-import { defaultSettings } from "./script.js";
-export function remove(tileset, what) {
+import { defaultSettings } from "./gameRenderer.js";
+export function remove(tileset, what, moved) {
     for (let x = 0; x < tileset.length; x++) {
         for (let y = 0; y < tileset[x].length; y++) {
             if (tileset[x][y] == what) {
                 switch (what) {
                     case defaultSettings.defaultSeeker:
-                        tileset[x][y] = defaultSettings.defaultObstacleMark;
+                        if (moved) {
+                            tileset[x][y] = 0;
+                        }
+                        else {
+                            tileset[x][y] = defaultSettings.defaultObstacleMark;
+                        }
                         break;
                     case defaultSettings.defaulWaypoint:
                         tileset[x][y] = 0;

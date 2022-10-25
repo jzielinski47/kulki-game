@@ -1,6 +1,15 @@
 import { getRandomInt } from "./misc.js";
 import { clearNums, remove, removeClassName } from "./pathfinding.js";
-import { balls, defaultSettings, tileset } from "./script.js";
+export const defaultSettings = {
+    width: 9,
+    height: 9,
+    defaultObstacles: 6,
+    defaultSeeker: 'S',
+    defaulWaypoint: 'W',
+    defaultObstacleMark: '#',
+};
+export let tileset = renderTileset(defaultSettings.width, defaultSettings.height);
+export let balls = renderTileset(defaultSettings.width, defaultSettings.height);
 let seeker, waypoint;
 let clicksOnTileset = 0;
 let found = false;
@@ -25,8 +34,6 @@ export function renderDefaultBalls(tileset, balls, settings, colors) {
         tileset[cords[0]][cords[1]] = settings.defaultObstacleMark;
         balls[cords[0]][cords[1]] = color;
     }
-    // console.table(tileset)
-    // console.table(balls)
 }
 export function renderBall(color) {
     const ball = document.createElement('div');
@@ -49,24 +56,21 @@ export function display(tileset, balls, settings) {
                     let seekerCords;
                     if (clicksOnTileset < 2) {
                         if (!target.classList.contains('seeker')) {
-                            remove(tileset, defaultSettings.defaultSeeker);
+                            remove(tileset, defaultSettings.defaultSeeker, false);
                             removeClassName('seeker');
                             seeker = target.id;
                             target.classList.add('seeker');
                             seekerCords = seeker.split('-').map(item => parseInt(item));
-                            // console.table(tileset)
                             tileset[seekerCords[0]][seekerCords[1]] = defaultSettings.defaultSeeker;
-                            console.table(tileset);
                             clicksOnTileset = 1;
                         }
                         else {
-                            remove(tileset, defaultSettings.defaultSeeker);
+                            remove(tileset, defaultSettings.defaultSeeker, false);
                             removeClassName('seeker');
-                            console.table(tileset);
                             seeker = '';
                             clicksOnTileset = 0;
                         }
-                        // console.table(balls)
+                        console.table(tileset);
                     }
                 });
             }
@@ -122,6 +126,8 @@ export function searchPath(seeker, waypoint, tileset) {
     // console.log(currentStartingPoint, currentWaypoint);
     let round = 0;
     const seekerColor = document.getElementById(seeker).childNodes[0].style.background;
+    document.getElementById(seeker).removeChild(document.getElementById(seeker).childNodes[0]);
+    remove(tileset, defaultSettings.defaultSeeker, true);
     console.log(seekerColor);
     exploitSurrounding(tileset, currentStartingPoint, currentWaypoint, round, defaultSettings, seekerColor);
 }
@@ -141,12 +147,12 @@ export function exploitSurrounding(tileset, seeker, finish, round, settings, col
                     setTimeout(() => {
                         found = true;
                         distance = tileset[seeker[0] + offsetX][seeker[1] + offsetY];
-                        tileset[seeker[0] + offsetX][seeker[1] + offsetY] = balls[seeker[0]][seeker[1]];
                         document.getElementById(`${seeker[0] + offsetX}-${seeker[1] + offsetY}`).innerHTML = '';
                         document.getElementById(`${seeker[0] + offsetX}-${seeker[1] + offsetY}`).append(renderBall(color));
+                        tileset[seeker[0] + offsetX][seeker[1] + offsetY] = defaultSettings.defaultObstacleMark;
                         findBestRoute(seeker[0] + offsetX, seeker[1] + offsetY, distance);
-                        resetPathfinder();
-                    }, 100);
+                        setTimeout(() => resetPathfinder(), 1000);
+                    }, 10);
             }
         }
     }
@@ -184,9 +190,10 @@ function resetPathfinder() {
     found = false;
     distance = 0;
     clicksOnTileset = 0;
-    remove(tileset, defaultSettings.defaultSeeker);
+    remove(tileset, defaultSettings.defaultSeeker, true);
     removeClassName('seeker');
-    remove(tileset, defaultSettings.defaulWaypoint);
+    remove(tileset, defaultSettings.defaulWaypoint, true);
     removeClassName('waypoint');
     clearNums(tileset);
+    setTimeout(() => removeClassName('path'), 1);
 }

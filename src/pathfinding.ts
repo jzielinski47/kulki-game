@@ -1,12 +1,19 @@
-import { defaultSettings } from "./script.js";
+
+import { defaultSettings } from "./gameRenderer.js";
 import { Tileset } from "./types/types";
 
-export function remove(tileset: Tileset, what: string | number) {
+export function remove(tileset: Tileset, what: string | number, moved: boolean) {
     for (let x: number = 0; x < tileset.length; x++) {
         for (let y: number = 0; y < tileset[x].length; y++) {
             if (tileset[x][y] == what) {
                 switch (what) {
-                    case defaultSettings.defaultSeeker: tileset[x][y] = defaultSettings.defaultObstacleMark; break;
+                    case defaultSettings.defaultSeeker:
+                        if (moved) {
+                            tileset[x][y] = 0;
+                        } else {
+                            tileset[x][y] = defaultSettings.defaultObstacleMark;
+                        }
+                        break;
                     case defaultSettings.defaulWaypoint: tileset[x][y] = 0; document.querySelector(x + '-' + y).innerHTML = '0'; break;
                     default: tileset[x][y] = 0; document.querySelector(x + '-' + y).innerHTML = '0'; break;
                 }
