@@ -1,6 +1,11 @@
 import { getRandomInt } from "./miscellaneous.js";
 import { Settings, Tileset } from "./types/types";
 
+let seeker: string, waypoint: string
+let clicksOnTileset: number = 0;
+let found: boolean = false;
+let distance: number;
+
 export function renderTileset(width: number, height: number) {
     let tab: Tileset = []
 
@@ -44,7 +49,7 @@ export function display(tileset: Tileset, defaultColors: Tileset, settings: Sett
             // so when the user moved the sphere the event listener was still on the previous tile
 
             if (tileset[x][y] == settings.defaultSphere) {
-                tile.append(renderSphere(x, y, defaultColors[x][y].toString()))
+                tile.append(renderSphere(x, y, defaultColors[x][y].toString(), tileset, settings))
             } else {
                 tile.innerHTML = tileset[x][y].toString()
             }
@@ -58,15 +63,16 @@ export function display(tileset: Tileset, defaultColors: Tileset, settings: Sett
     return container
 }
 
-export function renderSphere(x: number, y: number, color: string) {
+export function renderSphere(x: number, y: number, color: string, tileset: Tileset, settings: Settings) {
     const sphere: HTMLDivElement = document.createElement('div')
     sphere.className = 'sphere'
-    sphere.id = x + '=' + y
+    // sphere.id = x + '=' + y
     sphere.style.background = color
 
     // event handler
+    sphere.addEventListener('click', e => {
 
-
+    })
 
     return sphere
 }
