@@ -49,9 +49,6 @@ export function display(tileset: Tileset, defaultColors: Tileset, settings: Sett
                 tile.innerHTML = tileset[x][y].toString()
             }
 
-
-
-
             if (x != 0 && y == 0) tile.style.clear = 'both';
 
             container.append(tile)
@@ -68,7 +65,7 @@ export function renderSphere(x: number, y: number, color: string) {
     sphere.style.background = color
 
     // event handler
-    
+
 
 
     return sphere
