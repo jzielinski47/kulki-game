@@ -1,9 +1,11 @@
 import { getCords, getRandomInt, removeClassName, removeFromArray } from "./miscellaneous.js";
 import { searchPath } from "./pathfinder.js";
+// Global variables
 let seeker, waypoint;
 let progressStatus = 0;
 let found = false;
 let distance;
+// Global render functions
 export function renderTileset(width, height) {
     let tab = [];
     for (let x = 0; x < height; x++) {
@@ -102,4 +104,21 @@ export function renderSphere(x, y, color, tileset, settings) {
         console.table(tileset);
     });
     return sphere;
+}
+// Pathfinder (functions that use global variables)
+export function runPathfinder(seeker, waypoint, round, tileset, settings, color) {
+    function useSingleTile(offsetX, offsetY) {
+        var _a;
+        let expression = (_a = tileset[seeker[0] + offsetX]) === null || _a === void 0 ? void 0 : _a[seeker[1] + offsetY];
+        if (typeof expression === 'number') {
+            console.log(expression);
+        }
+    }
+    if (!found) {
+        round++;
+        useSingleTile(-1, 0);
+        useSingleTile(1, 0);
+        useSingleTile(0, -1);
+        useSingleTile(0, 1);
+    }
 }
