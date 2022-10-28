@@ -1,10 +1,10 @@
 import { clearNums, getCords, getRandomInt, removeClassName, removeFromArray, resetElement } from "./miscellaneous.js";
-// import { searchPath } from "./pathfinder.js";
 import { Settings, Tileset } from "./types/types";
 
 // Global variables
 
 let seeker: number[], waypoint: number[]
+let seekerColor: string
 let progressStatus: number = 0;
 let found: boolean = false;
 let distance: number;
@@ -113,6 +113,7 @@ export function renderSphere(x: number, y: number, color: string, tileset: Tiles
                 seeker = [x, y]
                 target.classList.add('seeker')
                 tileset[x][y] = settings.defaultSeeker
+                seekerColor = target.style.background as string
 
                 progressStatus = 1;
             } else {
@@ -230,7 +231,6 @@ export function searchPath(seeker: number[], waypoint: number[], tileset: Tilese
     const origin: HTMLDivElement = document.getElementById(`${seeker[0]}-${seeker[1]}`) as HTMLDivElement
 
     console.log(origin)
-    const seekerColor: string = (origin.childNodes[0] as HTMLDivElement).style.background as string
 
     origin.removeChild(origin.childNodes[0])
     origin.addEventListener('mouseenter', e => {

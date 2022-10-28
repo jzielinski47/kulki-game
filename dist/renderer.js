@@ -1,6 +1,7 @@
 import { clearNums, getCords, getRandomInt, removeClassName, removeFromArray, resetElement } from "./miscellaneous.js";
 // Global variables
 let seeker, waypoint;
+let seekerColor;
 let progressStatus = 0;
 let found = false;
 let distance;
@@ -91,6 +92,7 @@ export function renderSphere(x, y, color, tileset, settings) {
                 seeker = [x, y];
                 target.classList.add('seeker');
                 tileset[x][y] = settings.defaultSeeker;
+                seekerColor = target.style.background;
                 progressStatus = 1;
             }
             else {
@@ -176,7 +178,6 @@ export function searchPath(seeker, waypoint, tileset, settings) {
     let round = 0;
     const origin = document.getElementById(`${seeker[0]}-${seeker[1]}`);
     console.log(origin);
-    const seekerColor = origin.childNodes[0].style.background;
     origin.removeChild(origin.childNodes[0]);
     origin.addEventListener('mouseenter', e => {
         const target = e.currentTarget;
