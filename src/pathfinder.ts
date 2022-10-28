@@ -11,8 +11,8 @@ export function searchPath(seeker: number[], waypoint: number[], tileset: Tilese
 
     const seekerColor: string = (origin.childNodes[0] as HTMLDivElement).style.background as string
 
-    origin.removeChild(origin.childNodes[0])
-    removeFromArray(settings.defaultSeeker, tileset, true, settings)
+    // origin.removeChild(origin.childNodes[0])
+    // removeFromArray(settings.defaultSeeker, tileset, true, settings)
 
     runPathfinder(seeker, waypoint, round, tileset, settings, seekerColor)
 

@@ -138,12 +138,26 @@ export function runPathfinder(seeker: number[], waypoint: number[], round: numbe
     function useSingleTile(offsetX: number, offsetY: number) {
         let expression: string | number = tileset[seeker[0] + offsetX]?.[seeker[1] + offsetY]
 
-        if (typeof expression === 'number' && expression == 0) {
+        if (expression === 0) {
             expression = expression as number + round
-            tileset[seeker[0] + offsetX][seeker[1] + offsetY] = expression
-            document.getElementById(`${seeker[0] + offsetX}-${seeker[1] + offsetY}`).innerHTML = expression.toString()
 
-            setTimeout(() => runPathfinder(seeker, waypoint, tileset, settings, color), 1)
+            tileset[seeker[0] + offsetX][seeker[1] + offsetY] = expression
+            const destination = document.getElementById(`${seeker[0] + offsetX}-${seeker[1] + offsetY}`)
+            destination.innerHTML = expression.toString()
+
+            setTimeout(() => runPathfinder([seeker[0] + offsetX, seeker[1] + offsetY], waypoint, round, tileset, settings, color), 1)
+
+            if (seeker[0] + offsetX == waypoint[0] && seeker[1] + offsetY == waypoint[1]) setTimeout(() => {
+                found = true;
+                distance = tileset[seeker[0] + offsetX][seeker[1] + offsetY] as number
+
+                destination.innerHTML = ''
+                destination.append(renderSphere(seeker[0] + offsetX, seeker[1] + offsetY, color, tileset, settings))
+                tileset[seeker[0] + offsetX][seeker[1] + offsetY] = settings.defaultSphere
+                findBestRoute(seeker[0] + offsetX, seeker[1] + offsetY, distance, tileset)
+                // setTimeout(() => resetPathfinder(), 1000);
+
+            }, 10)
         }
 
     }
@@ -154,6 +168,36 @@ export function runPathfinder(seeker: number[], waypoint: number[], round: numbe
         useSingleTile(1, 0)
         useSingleTile(0, -1)
         useSingleTile(0, 1)
+        console.log(found)
     }
 
+}
+
+function findBestRoute(waypointX: number, waypointY: number, majorDist: number, tileset: Tileset) {
+
+    let route = [majorDist]
+
+    function findAvailableTile(wX: number, wY: number, offsetX: number, offsetY: number, dist) {
+        let expression: number | string = tileset[wX + offsetX]?.[wY + offsetY]
+        if (!route.includes(expression as number)) {
+            if (expression as number === dist - 1) {
+                route.push(expression as number)
+
+                document.getElementById(`${wX + offsetX}-${wY + offsetY}`).classList.add('path')
+
+                // console.log(route)
+
+                findAvailableTile(wX + offsetX, wY + offsetY, - 1, 0, dist - 1)
+                findAvailableTile(wX + offsetX, wY + offsetY, 1, 0, dist - 1)
+                findAvailableTile(wX + offsetX, wY + offsetY, 0, -1, dist - 1)
+                findAvailableTile(wX + offsetX, wY + offsetY, 0, 1, dist - 1)
+
+            }
+        }
+    }
+
+    findAvailableTile(waypointX, waypointY, - 1, 0, majorDist)
+    findAvailableTile(waypointX, waypointY, 1, 0, majorDist)
+    findAvailableTile(waypointX, waypointY, 0, -1, majorDist)
+    findAvailableTile(waypointX, waypointY, 0, 1, majorDist)
 }
