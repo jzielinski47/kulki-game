@@ -1,4 +1,5 @@
-import { getRandomInt, removeClassName, removeFromArray } from "./miscellaneous.js";
+import { getCords, getRandomInt, removeClassName, removeFromArray } from "./miscellaneous.js";
+import { searchPath } from "./pathfinder.js";
 import { Settings, Tileset } from "./types/types";
 
 let seeker: number[], waypoint: number[]
@@ -52,6 +53,32 @@ export function display(tileset: Tileset, defaultColors: Tileset, settings: Sett
                 tile.append(renderSphere(x, y, defaultColors[x][y].toString(), tileset, settings))
             } else {
                 tile.innerHTML = tileset[x][y].toString()
+                tile.addEventListener('mouseenter', e => {
+                    const target: HTMLDivElement = e.currentTarget as HTMLDivElement
+                    if (progressStatus == 1) {
+                        waypoint = getCords(target.id);
+                        if (seeker != waypoint) target.classList.add('waypoint')
+                    }
+                })
+                tile.addEventListener('mouseleave', e => {
+                    const target: HTMLDivElement = e.currentTarget as HTMLDivElement
+                    if (progressStatus == 1) {
+                        if (seeker != waypoint) target.classList.remove('waypoint')
+                    }
+                })
+                tile.addEventListener('click', e => {
+                    const target: HTMLDivElement = e.currentTarget as HTMLDivElement
+                    if (progressStatus == 1) {
+                        waypoint = getCords(target.id);
+                        if (seeker != waypoint) {
+                            target.innerHTML = settings.defaultWaypoint;
+                            target.classList.add('waypoint')
+                            progressStatus = 2;
+                        }
+                    }
+
+                    if (progressStatus == 2) searchPath(seeker, waypoint, tileset, settings)
+                })
             }
 
             if (x != 0 && y == 0) tile.style.clear = 'both';

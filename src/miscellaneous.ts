@@ -21,3 +21,7 @@ export function removeFromArray(name: string | number, arr: Tileset, moved: bool
         }
     }
 }
+
+export function getCords(id: string) {
+    return id.split('-').map(item => parseInt(item))
+}

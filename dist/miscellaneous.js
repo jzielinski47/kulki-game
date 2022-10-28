@@ -25,3 +25,6 @@ export function removeFromArray(name, arr, moved, settings) {
         }
     }
 }
+export function getCords(id) {
+    return id.split('-').map(item => parseInt(item));
+}
