@@ -1,4 +1,4 @@
-import { getRandomInt, removeClassName } from "./miscellaneous.js";
+import { getRandomInt, removeClassName, removeFromArray } from "./miscellaneous.js";
 import { Settings, Tileset } from "./types/types";
 
 let seeker: number[], waypoint: number[]
@@ -76,18 +76,24 @@ export function renderSphere(x: number, y: number, color: string, tileset: Tiles
         if (progressStatus < 2) {
 
             if (!target.classList.contains('seeker')) {
+                removeFromArray(settings.defaultSeeker, tileset, false, settings)
                 removeClassName('seeker')
+
                 seeker = [x, y]
                 target.classList.add('seeker')
                 tileset[x][y] = settings.defaultSeeker
 
                 progressStatus = 1;
             } else {
+                removeFromArray(settings.defaultSeeker, tileset, false, settings)
                 removeClassName('seeker')
+
                 seeker = []
                 progressStatus = 0
             }
         }
+
+        console.table(tileset)
 
     })
 

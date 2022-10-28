@@ -1,4 +1,4 @@
-import { getRandomInt, removeClassName } from "./miscellaneous.js";
+import { getRandomInt, removeClassName, removeFromArray } from "./miscellaneous.js";
 let seeker, waypoint;
 let progressStatus = 0;
 let found = false;
@@ -56,6 +56,7 @@ export function renderSphere(x, y, color, tileset, settings) {
         const target = e.target;
         if (progressStatus < 2) {
             if (!target.classList.contains('seeker')) {
+                removeFromArray(settings.defaultSeeker, tileset, false, settings);
                 removeClassName('seeker');
                 seeker = [x, y];
                 target.classList.add('seeker');
@@ -63,11 +64,13 @@ export function renderSphere(x, y, color, tileset, settings) {
                 progressStatus = 1;
             }
             else {
+                removeFromArray(settings.defaultSeeker, tileset, false, settings);
                 removeClassName('seeker');
                 seeker = [];
                 progressStatus = 0;
             }
         }
+        console.table(tileset);
     });
     return sphere;
 }
