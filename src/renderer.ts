@@ -138,8 +138,12 @@ export function runPathfinder(seeker: number[], waypoint: number[], round: numbe
     function useSingleTile(offsetX: number, offsetY: number) {
         let expression: string | number = tileset[seeker[0] + offsetX]?.[seeker[1] + offsetY]
 
-        if (typeof expression === 'number') {
-            console.log(expression)
+        if (typeof expression === 'number' && expression == 0) {
+            expression = expression as number + round
+            tileset[seeker[0] + offsetX][seeker[1] + offsetY] = expression
+            document.getElementById(`${seeker[0] + offsetX}-${seeker[1] + offsetY}`).innerHTML = expression.toString()
+
+            setTimeout(() => runPathfinder(seeker, waypoint, tileset, settings, color), 1)
         }
 
     }

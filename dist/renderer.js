@@ -110,8 +110,11 @@ export function runPathfinder(seeker, waypoint, round, tileset, settings, color)
     function useSingleTile(offsetX, offsetY) {
         var _a;
         let expression = (_a = tileset[seeker[0] + offsetX]) === null || _a === void 0 ? void 0 : _a[seeker[1] + offsetY];
-        if (typeof expression === 'number') {
-            console.log(expression);
+        if (typeof expression === 'number' && expression == 0) {
+            expression = expression + round;
+            tileset[seeker[0] + offsetX][seeker[1] + offsetY] = expression;
+            document.getElementById(`${seeker[0] + offsetX}-${seeker[1] + offsetY}`).innerHTML = expression.toString();
+            setTimeout(() => runPathfinder(seeker, waypoint, tileset, settings, color), 1);
         }
     }
     if (!found) {
