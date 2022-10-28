@@ -1,5 +1,4 @@
-import { getCords, getRandomInt, removeClassName, removeFromArray } from "./miscellaneous.js";
-import { searchPath } from "./pathfinder.js";
+import { clearNums, getCords, getRandomInt, removeClassName, removeFromArray, resetElement } from "./miscellaneous.js";
 // Global variables
 let seeker, waypoint;
 let progressStatus = 0;
@@ -62,7 +61,7 @@ export function display(tileset, defaultColors, settings) {
                     if (progressStatus == 1) {
                         waypoint = getCords(target.id);
                         if (seeker != waypoint) {
-                            target.innerHTML = settings.defaultWaypoint;
+                            // target.innerHTML = settings.defaultWaypoint;
                             target.classList.add('waypoint');
                             progressStatus = 2;
                         }
@@ -84,7 +83,7 @@ export function renderSphere(x, y, color, tileset, settings) {
     sphere.style.background = color;
     // event handler
     sphere.addEventListener('click', e => {
-        const target = e.target;
+        const target = e.currentTarget;
         if (progressStatus < 2) {
             if (!target.classList.contains('seeker')) {
                 removeFromArray(settings.defaultSeeker, tileset, false, settings);
@@ -113,18 +112,21 @@ export function runPathfinder(seeker, waypoint, round, tileset, settings, color)
         if (expression === 0) {
             expression = expression + round;
             tileset[seeker[0] + offsetX][seeker[1] + offsetY] = expression;
-            const destination = document.getElementById(`${seeker[0] + offsetX}-${seeker[1] + offsetY}`);
+            let destination = document.getElementById(`${seeker[0] + offsetX}-${seeker[1] + offsetY}`);
             destination.innerHTML = expression.toString();
             setTimeout(() => runPathfinder([seeker[0] + offsetX, seeker[1] + offsetY], waypoint, round, tileset, settings, color), 1);
             if (seeker[0] + offsetX == waypoint[0] && seeker[1] + offsetY == waypoint[1])
                 setTimeout(() => {
                     found = true;
                     distance = tileset[seeker[0] + offsetX][seeker[1] + offsetY];
+                    resetElement(destination);
+                    destination = document.getElementById(`${seeker[0] + offsetX}-${seeker[1] + offsetY}`);
                     destination.innerHTML = '';
                     destination.append(renderSphere(seeker[0] + offsetX, seeker[1] + offsetY, color, tileset, settings));
                     tileset[seeker[0] + offsetX][seeker[1] + offsetY] = settings.defaultSphere;
                     findBestRoute(seeker[0] + offsetX, seeker[1] + offsetY, distance, tileset);
-                    // setTimeout(() => resetPathfinder(), 1000);
+                    console.table(tileset);
+                    setTimeout(() => resetPathfinder(tileset, settings), 1000);
                 }, 10);
         }
     }
@@ -158,4 +160,52 @@ function findBestRoute(waypointX, waypointY, majorDist, tileset) {
     findAvailableTile(waypointX, waypointY, 1, 0, majorDist);
     findAvailableTile(waypointX, waypointY, 0, -1, majorDist);
     findAvailableTile(waypointX, waypointY, 0, 1, majorDist);
+}
+function resetPathfinder(tileset, settings) {
+    found = false;
+    distance = 0;
+    progressStatus = 0;
+    removeClassName('seeker');
+    removeClassName('waypoint');
+    removeFromArray(settings.defaultSeeker, tileset, true, settings);
+    removeFromArray(settings.defaultWaypoint, tileset, true, settings);
+    clearNums(tileset, settings);
+    setTimeout(() => removeClassName('path'), 1);
+}
+export function searchPath(seeker, waypoint, tileset, settings) {
+    let round = 0;
+    const origin = document.getElementById(`${seeker[0]}-${seeker[1]}`);
+    console.log(origin);
+    const seekerColor = origin.childNodes[0].style.background;
+    origin.removeChild(origin.childNodes[0]);
+    origin.addEventListener('mouseenter', e => {
+        const target = e.currentTarget;
+        if (progressStatus == 1) {
+            waypoint = getCords(target.id);
+            if (seeker != waypoint)
+                target.classList.add('waypoint');
+        }
+    });
+    origin.addEventListener('mouseleave', e => {
+        const target = e.currentTarget;
+        if (progressStatus == 1) {
+            if (seeker != waypoint)
+                target.classList.remove('waypoint');
+        }
+    });
+    origin.addEventListener('click', e => {
+        const target = e.currentTarget;
+        if (progressStatus == 1) {
+            waypoint = getCords(target.id);
+            if (seeker != waypoint) {
+                // target.innerHTML = settings.defaultWaypoint;
+                target.classList.add('waypoint');
+                progressStatus = 2;
+            }
+        }
+        if (progressStatus == 2)
+            searchPath(seeker, waypoint, tileset, settings);
+    });
+    removeFromArray(settings.defaultSeeker, tileset, true, settings);
+    runPathfinder(seeker, waypoint, round, tileset, settings, seekerColor);
 }

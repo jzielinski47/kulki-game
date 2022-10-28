@@ -25,3 +25,18 @@ export function removeFromArray(name: string | number, arr: Tileset, moved: bool
 export function getCords(id: string) {
     return id.split('-').map(item => parseInt(item))
 }
+
+export function clearNums(tileset: Tileset, settings: Settings) {
+    for (let x: number = 0; x < tileset.length; x++) {
+        for (let y: number = 0; y < tileset[x].length; y++) {
+            if (tileset[x][y] != settings.defaultSeeker && tileset[x][y] != settings.defaultWaypoint && tileset[x][y] != settings.defaultSphere) {
+                tileset[x][y] = 0
+            }
+        }
+    }
+}
+
+export function resetElement(element: HTMLElement) {
+    const factoryDefault = element.cloneNode(true);
+    element.replaceWith(factoryDefault)
+}

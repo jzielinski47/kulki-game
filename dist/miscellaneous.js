@@ -28,3 +28,16 @@ export function removeFromArray(name, arr, moved, settings) {
 export function getCords(id) {
     return id.split('-').map(item => parseInt(item));
 }
+export function clearNums(tileset, settings) {
+    for (let x = 0; x < tileset.length; x++) {
+        for (let y = 0; y < tileset[x].length; y++) {
+            if (tileset[x][y] != settings.defaultSeeker && tileset[x][y] != settings.defaultWaypoint && tileset[x][y] != settings.defaultSphere) {
+                tileset[x][y] = 0;
+            }
+        }
+    }
+}
+export function resetElement(element) {
+    const factoryDefault = element.cloneNode(true);
+    element.replaceWith(factoryDefault);
+}
