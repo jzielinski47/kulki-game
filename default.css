@@ -38,13 +38,13 @@ html,
     align-items: center;
 }
 
-.ball {
+.sphere {
     width: 60%;
     height: 60%;
     border-radius: 50%;
 }
 
-.seeker div {
+.seeker {
     width: 90%;
     height: 90%;
 }
