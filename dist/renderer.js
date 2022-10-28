@@ -1,6 +1,6 @@
-import { getRandomInt } from "./miscellaneous.js";
+import { getRandomInt, removeClassName } from "./miscellaneous.js";
 let seeker, waypoint;
-let clicksOnTileset = 0;
+let progressStatus = 0;
 let found = false;
 let distance;
 export function renderTileset(width, height) {
@@ -50,10 +50,24 @@ export function display(tileset, defaultColors, settings) {
 export function renderSphere(x, y, color, tileset, settings) {
     const sphere = document.createElement('div');
     sphere.className = 'sphere';
-    // sphere.id = x + '=' + y
     sphere.style.background = color;
     // event handler
     sphere.addEventListener('click', e => {
+        const target = e.target;
+        if (progressStatus < 2) {
+            if (!target.classList.contains('seeker')) {
+                removeClassName('seeker');
+                seeker = [x, y];
+                target.classList.add('seeker');
+                tileset[x][y] = settings.defaultSeeker;
+                progressStatus = 1;
+            }
+            else {
+                removeClassName('seeker');
+                seeker = [];
+                progressStatus = 0;
+            }
+        }
     });
     return sphere;
 }

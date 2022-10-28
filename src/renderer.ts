@@ -1,8 +1,8 @@
-import { getRandomInt } from "./miscellaneous.js";
+import { getRandomInt, removeClassName } from "./miscellaneous.js";
 import { Settings, Tileset } from "./types/types";
 
-let seeker: string, waypoint: string
-let clicksOnTileset: number = 0;
+let seeker: number[], waypoint: number[]
+let progressStatus: number = 0;
 let found: boolean = false;
 let distance: number;
 
@@ -66,11 +66,28 @@ export function display(tileset: Tileset, defaultColors: Tileset, settings: Sett
 export function renderSphere(x: number, y: number, color: string, tileset: Tileset, settings: Settings) {
     const sphere: HTMLDivElement = document.createElement('div')
     sphere.className = 'sphere'
-    // sphere.id = x + '=' + y
     sphere.style.background = color
 
     // event handler
     sphere.addEventListener('click', e => {
+
+        const target = e.target as HTMLDivElement
+
+        if (progressStatus < 2) {
+
+            if (!target.classList.contains('seeker')) {
+                removeClassName('seeker')
+                seeker = [x, y]
+                target.classList.add('seeker')
+                tileset[x][y] = settings.defaultSeeker
+
+                progressStatus = 1;
+            } else {
+                removeClassName('seeker')
+                seeker = []
+                progressStatus = 0
+            }
+        }
 
     })
 
