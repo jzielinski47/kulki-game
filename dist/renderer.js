@@ -210,3 +210,8 @@ export function searchPath(seeker, waypoint, tileset, settings) {
     removeFromArray(settings.defaultSeeker, tileset, true, settings);
     runPathfinder(seeker, waypoint, round, tileset, settings, seekerColor);
 }
+export function renderUpcoming(colors, tileset, settings) {
+    for (let i = 0; i < 3; i++) {
+        document.querySelector('#upcoming').append(renderSphere(0, 0, colors[Math.floor(Math.random() * colors.length)], tileset, settings));
+    }
+}

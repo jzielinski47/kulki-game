@@ -264,3 +264,9 @@ export function searchPath(seeker: number[], waypoint: number[], tileset: Tilese
     runPathfinder(seeker, waypoint, round, tileset, settings, seekerColor)
 
 }
+
+export function renderUpcoming(colors: string[], tileset: Tileset, settings: Settings) {
+    for (let i = 0; i < 3; i++) {
+        document.querySelector('#upcoming').append(renderSphere(0, 0, colors[Math.floor(Math.random() * colors.length)], tileset, settings))
+    }
+}
