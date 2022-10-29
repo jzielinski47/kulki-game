@@ -40,3 +40,4 @@ export function resetElement(element: HTMLElement) {
     const factoryDefault = element.cloneNode(true);
     element.replaceWith(factoryDefault)
 }
+

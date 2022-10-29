@@ -153,7 +153,7 @@ export function runPathfinder(seeker: number[], waypoint: number[], round: numbe
                 found = true;
                 distance = tileset[seeker[0] + offsetX][seeker[1] + offsetY] as number
 
-                resetElement(destination)
+                destination.replaceWith(destination.cloneNode(true))
                 destination = document.getElementById(`${seeker[0] + offsetX}-${seeker[1] + offsetY}`)
 
                 destination.innerHTML = ''
@@ -220,6 +220,7 @@ function resetPathfinder(tileset: Tileset, settings: Settings) {
     removeFromArray(settings.defaultWaypoint, tileset, true, settings)
 
     clearNums(tileset, settings)
+    returnEventListeners(tileset, settings)
 
     setTimeout(() => removeClassName('path'), 1);
 
@@ -259,6 +260,7 @@ export function searchPath(seeker: number[], waypoint: number[], tileset: Tilese
 
         if (progressStatus == 2) searchPath(seeker, waypoint, tileset, settings)
     })
+
     removeFromArray(settings.defaultSeeker, tileset, true, settings)
 
     runPathfinder(seeker, waypoint, round, tileset, settings, seekerColor)
@@ -268,5 +270,42 @@ export function searchPath(seeker: number[], waypoint: number[], tileset: Tilese
 export function renderUpcoming(colors: string[], tileset: Tileset, settings: Settings) {
     for (let i = 0; i < 3; i++) {
         document.querySelector('#upcoming').append(renderSphere(0, 0, colors[Math.floor(Math.random() * colors.length)], tileset, settings))
+    }
+}
+
+export function returnEventListeners(tileset: Tileset, settings: Settings) {
+    for (let x: number = 0; x < tileset.length; x++) {
+        for (let y: number = 0; y < tileset[x].length; y++) {
+            if (tileset[x][y] == 0) {
+                const origin = document.getElementById(x + '-' + y)
+
+                origin.addEventListener('mouseenter', e => {
+                    const target: HTMLDivElement = e.currentTarget as HTMLDivElement
+                    if (progressStatus == 1) {
+                        waypoint = getCords(target.id);
+                        if (seeker != waypoint) target.classList.add('waypoint')
+                    }
+                })
+                origin.addEventListener('mouseleave', e => {
+                    const target: HTMLDivElement = e.currentTarget as HTMLDivElement
+                    if (progressStatus == 1) {
+                        if (seeker != waypoint) target.classList.remove('waypoint')
+                    }
+                })
+                origin.addEventListener('click', e => {
+                    const target: HTMLDivElement = e.currentTarget as HTMLDivElement
+                    if (progressStatus == 1) {
+                        waypoint = getCords(target.id);
+                        if (seeker != waypoint) {
+                            // target.innerHTML = settings.defaultWaypoint;
+                            target.classList.add('waypoint')
+                            progressStatus = 2;
+                        }
+                    }
+
+                    if (progressStatus == 2) searchPath(seeker, waypoint, tileset, settings)
+                })
+            }
+        }
     }
 }
