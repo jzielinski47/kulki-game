@@ -1,10 +1,10 @@
 import { clearNums, getCords, getRandomInt, removeClassName, removeFromArray, resetElement } from "./miscellaneous.js";
-// import { searchPath } from "./pathfinder.js";
 import { Settings, Tileset } from "./types/types";
 
 // Global variables
 
 let seeker: number[], waypoint: number[]
+let seekerColor: string
 let progressStatus: number = 0;
 let found: boolean = false;
 let distance: number;
@@ -74,10 +74,12 @@ export function display(tileset: Tileset, defaultColors: Tileset, settings: Sett
                     const target: HTMLDivElement = e.currentTarget as HTMLDivElement
                     if (progressStatus == 1) {
                         waypoint = getCords(target.id);
-                        if (seeker != waypoint) {
-                            // target.innerHTML = settings.defaultWaypoint;
-                            target.classList.add('waypoint')
-                            progressStatus = 2;
+                        if (checkNeighbours(waypoint[0], waypoint[1], tileset, settings)) {
+                            if (seeker != waypoint) {
+                                // target.innerHTML = settings.defaultWaypoint;
+                                target.classList.add('waypoint')
+                                progressStatus = 2;
+                            }
                         }
                     }
 
@@ -107,14 +109,22 @@ export function renderSphere(x: number, y: number, color: string, tileset: Tiles
         if (progressStatus < 2) {
 
             if (!target.classList.contains('seeker')) {
-                removeFromArray(settings.defaultSeeker, tileset, false, settings)
-                removeClassName('seeker')
 
-                seeker = [x, y]
-                target.classList.add('seeker')
-                tileset[x][y] = settings.defaultSeeker
+                if (checkNeighbours(x, y, tileset, settings)) {
+                    removeFromArray(settings.defaultSeeker, tileset, false, settings)
+                    removeClassName('seeker')
 
-                progressStatus = 1;
+                    console.warn(checkNeighbours(x, y, tileset, settings));
+
+
+                    seeker = [x, y]
+                    target.classList.add('seeker')
+                    tileset[x][y] = settings.defaultSeeker
+                    seekerColor = target.style.background as string
+
+                    progressStatus = 1;
+                }
+
             } else {
                 removeFromArray(settings.defaultSeeker, tileset, false, settings)
                 removeClassName('seeker')
@@ -152,7 +162,7 @@ export function runPathfinder(seeker: number[], waypoint: number[], round: numbe
                 found = true;
                 distance = tileset[seeker[0] + offsetX][seeker[1] + offsetY] as number
 
-                resetElement(destination)
+                destination.replaceWith(destination.cloneNode(true))
                 destination = document.getElementById(`${seeker[0] + offsetX}-${seeker[1] + offsetY}`)
 
                 destination.innerHTML = ''
@@ -219,6 +229,7 @@ function resetPathfinder(tileset: Tileset, settings: Settings) {
     removeFromArray(settings.defaultWaypoint, tileset, true, settings)
 
     clearNums(tileset, settings)
+    returnEventListeners(tileset, settings)
 
     setTimeout(() => removeClassName('path'), 1);
 
@@ -230,37 +241,84 @@ export function searchPath(seeker: number[], waypoint: number[], tileset: Tilese
     const origin: HTMLDivElement = document.getElementById(`${seeker[0]}-${seeker[1]}`) as HTMLDivElement
 
     console.log(origin)
-    const seekerColor: string = (origin.childNodes[0] as HTMLDivElement).style.background as string
 
     origin.removeChild(origin.childNodes[0])
-    origin.addEventListener('mouseenter', e => {
-        const target: HTMLDivElement = e.currentTarget as HTMLDivElement
-        if (progressStatus == 1) {
-            waypoint = getCords(target.id);
-            if (seeker != waypoint) target.classList.add('waypoint')
-        }
-    })
-    origin.addEventListener('mouseleave', e => {
-        const target: HTMLDivElement = e.currentTarget as HTMLDivElement
-        if (progressStatus == 1) {
-            if (seeker != waypoint) target.classList.remove('waypoint')
-        }
-    })
-    origin.addEventListener('click', e => {
-        const target: HTMLDivElement = e.currentTarget as HTMLDivElement
-        if (progressStatus == 1) {
-            waypoint = getCords(target.id);
-            if (seeker != waypoint) {
-                // target.innerHTML = settings.defaultWaypoint;
-                target.classList.add('waypoint')
-                progressStatus = 2;
-            }
-        }
 
-        if (progressStatus == 2) searchPath(seeker, waypoint, tileset, settings)
-    })
     removeFromArray(settings.defaultSeeker, tileset, true, settings)
 
     runPathfinder(seeker, waypoint, round, tileset, settings, seekerColor)
+
+}
+
+export function renderUpcoming(colors: string[], tileset: Tileset, settings: Settings) {
+    for (let i = 0; i < 3; i++) {
+        document.querySelector('#upcoming').append(renderSphere(0, 0, colors[Math.floor(Math.random() * colors.length)], tileset, settings))
+    }
+}
+
+export function returnEventListeners(tileset: Tileset, settings: Settings) {
+    for (let x: number = 0; x < tileset.length; x++) {
+        for (let y: number = 0; y < tileset[x].length; y++) {
+            if (tileset[x][y] == 0) {
+                const origin = document.getElementById(x + '-' + y)
+
+                origin.addEventListener('mouseenter', e => {
+                    const target: HTMLDivElement = e.currentTarget as HTMLDivElement
+                    if (progressStatus == 1) {
+                        waypoint = getCords(target.id);
+                        if (seeker != waypoint) target.classList.add('waypoint')
+                    }
+                })
+                origin.addEventListener('mouseleave', e => {
+                    const target: HTMLDivElement = e.currentTarget as HTMLDivElement
+                    if (progressStatus == 1) {
+                        if (seeker != waypoint) target.classList.remove('waypoint')
+                    }
+                })
+                origin.addEventListener('click', e => {
+                    const target: HTMLDivElement = e.currentTarget as HTMLDivElement
+                    if (progressStatus == 1) {
+                        waypoint = getCords(target.id);
+                        if (checkNeighbours(waypoint[0], waypoint[1], tileset, settings)) {
+                            if (seeker != waypoint) {
+                                // target.innerHTML = settings.defaultWaypoint;
+                                target.classList.add('waypoint')
+                                progressStatus = 2;
+                            }
+                        }
+
+                    }
+
+                    if (progressStatus == 2) searchPath(seeker, waypoint, tileset, settings)
+                })
+            }
+        }
+    }
+}
+
+export function checkNeighbours(x: number, y: number, tileset: Tileset, settings: Settings) {
+
+    let possibleSelection: boolean = true
+    let survey: boolean[] = []
+
+    function chcekSingleNeighbour(offsetX: number, offsetY: number) {
+        if (tileset[x + offsetX]?.[y + offsetY] !== 0) {
+            console.log(tileset[x + offsetX]?.[y + offsetY])
+            return false
+        }
+    }
+
+    survey.push(chcekSingleNeighbour(-1, 0))
+    survey.push(chcekSingleNeighbour(1, 0))
+    survey.push(chcekSingleNeighbour(0, -1))
+    survey.push(chcekSingleNeighbour(0, 1))
+
+    if (survey.every(direction => direction === false)) {
+        possibleSelection = false
+    } else {
+        possibleSelection = true
+    }
+
+    return possibleSelection
 
 }

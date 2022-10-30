@@ -1,4 +1,4 @@
-import { display, renderDefaultSpheres, renderTileset } from "./renderer.js"
+import { display, renderDefaultSpheres, renderTileset, renderUpcoming } from "./renderer.js"
 import { Settings, Tileset } from "./types/types"
 
 const app: HTMLDivElement = document.querySelector('#app')
@@ -22,3 +22,5 @@ app.append(display(tileset, defaultColors, settings))
 
 console.table(tileset)
 console.table(defaultColors)
+
+renderUpcoming(colors, tileset, settings)
