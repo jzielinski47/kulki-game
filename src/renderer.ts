@@ -74,10 +74,12 @@ export function display(tileset: Tileset, defaultColors: Tileset, settings: Sett
                     const target: HTMLDivElement = e.currentTarget as HTMLDivElement
                     if (progressStatus == 1) {
                         waypoint = getCords(target.id);
-                        if (seeker != waypoint) {
-                            // target.innerHTML = settings.defaultWaypoint;
-                            target.classList.add('waypoint')
-                            progressStatus = 2;
+                        if (checkNeighbours(waypoint[0], waypoint[1], tileset, settings)) {
+                            if (seeker != waypoint) {
+                                // target.innerHTML = settings.defaultWaypoint;
+                                target.classList.add('waypoint')
+                                progressStatus = 2;
+                            }
                         }
                     }
 
@@ -107,15 +109,22 @@ export function renderSphere(x: number, y: number, color: string, tileset: Tiles
         if (progressStatus < 2) {
 
             if (!target.classList.contains('seeker')) {
-                removeFromArray(settings.defaultSeeker, tileset, false, settings)
-                removeClassName('seeker')
 
-                seeker = [x, y]
-                target.classList.add('seeker')
-                tileset[x][y] = settings.defaultSeeker
-                seekerColor = target.style.background as string
+                if (checkNeighbours(x, y, tileset, settings)) {
+                    removeFromArray(settings.defaultSeeker, tileset, false, settings)
+                    removeClassName('seeker')
 
-                progressStatus = 1;
+                    console.warn(checkNeighbours(x, y, tileset, settings));
+
+
+                    seeker = [x, y]
+                    target.classList.add('seeker')
+                    tileset[x][y] = settings.defaultSeeker
+                    seekerColor = target.style.background as string
+
+                    progressStatus = 1;
+                }
+
             } else {
                 removeFromArray(settings.defaultSeeker, tileset, false, settings)
                 removeClassName('seeker')
@@ -234,32 +243,6 @@ export function searchPath(seeker: number[], waypoint: number[], tileset: Tilese
     console.log(origin)
 
     origin.removeChild(origin.childNodes[0])
-    origin.addEventListener('mouseenter', e => {
-        const target: HTMLDivElement = e.currentTarget as HTMLDivElement
-        if (progressStatus == 1) {
-            waypoint = getCords(target.id);
-            if (seeker != waypoint) target.classList.add('waypoint')
-        }
-    })
-    origin.addEventListener('mouseleave', e => {
-        const target: HTMLDivElement = e.currentTarget as HTMLDivElement
-        if (progressStatus == 1) {
-            if (seeker != waypoint) target.classList.remove('waypoint')
-        }
-    })
-    origin.addEventListener('click', e => {
-        const target: HTMLDivElement = e.currentTarget as HTMLDivElement
-        if (progressStatus == 1) {
-            waypoint = getCords(target.id);
-            if (seeker != waypoint) {
-                // target.innerHTML = settings.defaultWaypoint;
-                target.classList.add('waypoint')
-                progressStatus = 2;
-            }
-        }
-
-        if (progressStatus == 2) searchPath(seeker, waypoint, tileset, settings)
-    })
 
     removeFromArray(settings.defaultSeeker, tileset, true, settings)
 
@@ -296,11 +279,14 @@ export function returnEventListeners(tileset: Tileset, settings: Settings) {
                     const target: HTMLDivElement = e.currentTarget as HTMLDivElement
                     if (progressStatus == 1) {
                         waypoint = getCords(target.id);
-                        if (seeker != waypoint) {
-                            // target.innerHTML = settings.defaultWaypoint;
-                            target.classList.add('waypoint')
-                            progressStatus = 2;
+                        if (checkNeighbours(waypoint[0], waypoint[1], tileset, settings)) {
+                            if (seeker != waypoint) {
+                                // target.innerHTML = settings.defaultWaypoint;
+                                target.classList.add('waypoint')
+                                progressStatus = 2;
+                            }
                         }
+
                     }
 
                     if (progressStatus == 2) searchPath(seeker, waypoint, tileset, settings)
@@ -308,4 +294,31 @@ export function returnEventListeners(tileset: Tileset, settings: Settings) {
             }
         }
     }
+}
+
+export function checkNeighbours(x: number, y: number, tileset: Tileset, settings: Settings) {
+
+    let possibleSelection: boolean = true
+    let survey: boolean[] = []
+
+    function chcekSingleNeighbour(offsetX: number, offsetY: number) {
+        if (tileset[x + offsetX]?.[y + offsetY] !== 0) {
+            console.log(tileset[x + offsetX]?.[y + offsetY])
+            return false
+        }
+    }
+
+    survey.push(chcekSingleNeighbour(-1, 0))
+    survey.push(chcekSingleNeighbour(1, 0))
+    survey.push(chcekSingleNeighbour(0, -1))
+    survey.push(chcekSingleNeighbour(0, 1))
+
+    if (survey.every(direction => direction === false)) {
+        possibleSelection = false
+    } else {
+        possibleSelection = true
+    }
+
+    return possibleSelection
+
 }
