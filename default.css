@@ -67,3 +67,19 @@ body {
 }
 
 .hover {}
+
+#upcoming {
+    display: flex;
+    gap: 0.5em;
+}
+
+.default {
+    width: 30px;
+    height: 30px;
+}
+
+#upcoming-spheres {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
