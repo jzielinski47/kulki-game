@@ -2,7 +2,7 @@ import { display, renderDefaultSpheres, renderTileset, renderUpcoming } from "./
 import { Settings, Tileset } from "./types/types"
 
 const app: HTMLDivElement = document.querySelector('#app')
-const colors: string[] = ['#FA6B5D', '#F79C53', '#EFC95E', '#76BD6D', '#59AAA4', '#9F82C4', '#C482BD']
+export const colors: string[] = ['#FA6B5D', '#F79C53', '#EFC95E', '#76BD6D', '#59AAA4', '#9F82C4', '#C482BD']
 
 // default settings for the project
 
@@ -26,4 +26,3 @@ app.append(display(tileset, defaultColors, settings))
 console.table(tileset)
 console.table(defaultColors)
 
-renderUpcoming(colors, tileset, settings)
