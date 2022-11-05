@@ -1,13 +1,20 @@
+import { Sphere } from "./Sphere.js";
 import { clearNums, getCords, getRandomInt, removeClassName, removeFromArray, resetElement } from "./miscellaneous.js";
+import { colors } from "./script.js";
 import { Settings, Tileset } from "./types/types";
 
 // Global variables
 
-let seeker: number[], waypoint: number[]
-let seekerColor: string
+let localSphereMemory: string[] = []
+
+let seeker: number[], waypoint: number[];
+let seekerColor: string;
 let progressStatus: number = 0;
 let found: boolean = false;
 let distance: number;
+
+// Default render
+renderUpcoming(3, colors);
 
 // Global render functions
 
@@ -97,9 +104,8 @@ export function display(tileset: Tileset, defaultColors: Tileset, settings: Sett
 }
 
 export function renderSphere(x: number, y: number, color: string, tileset: Tileset, settings: Settings) {
-    const sphere: HTMLDivElement = document.createElement('div')
-    sphere.className = 'sphere'
-    sphere.style.background = color
+    const model: Sphere = new Sphere(color)
+    const sphere = model.render()
 
     // event handler
     sphere.addEventListener('click', e => {
@@ -114,7 +120,7 @@ export function renderSphere(x: number, y: number, color: string, tileset: Tiles
                     removeFromArray(settings.defaultSeeker, tileset, false, settings)
                     removeClassName('seeker')
 
-                    console.warn(checkNeighbours(x, y, tileset, settings));
+                    // console.warn(checkNeighbours(x, y, tileset, settings));
 
 
                     seeker = [x, y]
@@ -171,7 +177,11 @@ export function runPathfinder(seeker: number[], waypoint: number[], round: numbe
                 tileset[seeker[0] + offsetX][seeker[1] + offsetY] = settings.defaultSphere
                 findBestRoute(seeker[0] + offsetX, seeker[1] + offsetY, distance, tileset)
                 console.table(tileset)
-                setTimeout(() => resetPathfinder(tileset, settings), 1000);
+                setTimeout(() => {
+                    resetPathfinder(tileset, settings);
+                    renderUpcoming(3, colors);
+                }, 1000);
+
 
             }, 10)
         }
@@ -184,7 +194,7 @@ export function runPathfinder(seeker: number[], waypoint: number[], round: numbe
         useSingleTile(1, 0)
         useSingleTile(0, -1)
         useSingleTile(0, 1)
-        console.log(found)
+        // console.log(found)
     }
 
 }
@@ -228,10 +238,16 @@ function resetPathfinder(tileset: Tileset, settings: Settings) {
     removeFromArray(settings.defaultSeeker, tileset, true, settings)
     removeFromArray(settings.defaultWaypoint, tileset, true, settings)
 
+    document.querySelector('#upcoming').innerHTML = ''
+    appendToTileset(tileset, settings)
+    localSphereMemory = []
+
     clearNums(tileset, settings)
     returnEventListeners(tileset, settings)
 
     setTimeout(() => removeClassName('path'), 1);
+
+
 
 }
 
@@ -240,18 +256,15 @@ export function searchPath(seeker: number[], waypoint: number[], tileset: Tilese
     let round: number = 0
     const origin: HTMLDivElement = document.getElementById(`${seeker[0]}-${seeker[1]}`) as HTMLDivElement
 
-    console.log(origin)
+    // console.log(origin)
 
-    origin.removeChild(origin.childNodes[0])
+    // origin.removeChild(origin.childNodes[0])
+    origin.innerHTML = ''
 
     removeFromArray(settings.defaultSeeker, tileset, true, settings)
 
     runPathfinder(seeker, waypoint, round, tileset, settings, seekerColor)
 
-}
-
-export function renderUpcoming(colors: string[], tileset: Tileset, settings: Settings) {
-    
 }
 
 export function returnEventListeners(tileset: Tileset, settings: Settings) {
@@ -301,7 +314,7 @@ export function checkNeighbours(x: number, y: number, tileset: Tileset, settings
 
     function chcekSingleNeighbour(offsetX: number, offsetY: number) {
         if (tileset[x + offsetX]?.[y + offsetY] !== 0) {
-            console.log(tileset[x + offsetX]?.[y + offsetY])
+            // console.log(tileset[x + offsetX]?.[y + offsetY])
             return false
         }
     }
@@ -318,5 +331,81 @@ export function checkNeighbours(x: number, y: number, tileset: Tileset, settings
     }
 
     return possibleSelection
+
+}
+
+export function renderUpcoming(amount: number, colors: string[]) {
+
+    const upcomingSpheres: HTMLDivElement = document.querySelector('#upcoming')
+
+    for (let i = 0; i < amount; i++) {
+
+        const color = colors[Math.floor(Math.random() * colors.length)]
+        const model: Sphere = new Sphere(color)
+        const sphere = model.render()
+        sphere.classList.add('default')
+
+        localSphereMemory.push(color)
+        upcomingSpheres.append(sphere)
+
+    }
+
+    console.log(localSphereMemory)
+
+}
+
+export function appendToTileset(tileset: Tileset, settings: Settings) {
+    for (let i = 0; i < localSphereMemory.length; i++) {
+        const model = new Sphere(localSphereMemory[i])
+        const sphere = model.render()
+
+        let cords: number[] = [getRandomInt(settings.height), getRandomInt(settings.width)]
+
+        // console.warn('d')
+        while (tileset[cords[0]][cords[1]] == settings.defaultSphere) {
+            cords = [getRandomInt(settings.height), getRandomInt(settings.width)]
+        }
+
+        sphere.addEventListener('click', e => {
+
+            const target = e.currentTarget as HTMLDivElement
+
+            if (progressStatus < 2) {
+
+                if (!target.classList.contains('seeker')) {
+
+                    if (checkNeighbours(cords[0], cords[1], tileset, settings)) {
+                        removeFromArray(settings.defaultSeeker, tileset, false, settings)
+                        removeClassName('seeker')
+
+                        // console.warn(checkNeighbours(x, y, tileset, settings));
+
+                        seeker = cords
+                        target.classList.add('seeker')
+                        tileset[cords[0]][cords[1]] = settings.defaultSeeker
+                        seekerColor = target.style.background as string
+
+                        progressStatus = 1;
+                    }
+
+                } else {
+                    removeFromArray(settings.defaultSeeker, tileset, false, settings)
+                    removeClassName('seeker')
+
+                    seeker = []
+                    progressStatus = 0
+                }
+            }
+
+        })
+
+        tileset[cords[0]][cords[1]] = settings.defaultSphere
+
+        const destination = document.getElementById(cords[0] + '-' + cords[1])
+        destination.replaceWith(destination.cloneNode(false))
+        destination.innerHTML = ''
+        document.getElementById(cords[0] + '-' + cords[1]).append(sphere)
+        // console.table(tileset)
+    }
 
 }
