@@ -1,4 +1,4 @@
-import { tileHoverHandler, tileResetHandler, tileClickHandler } from "./pathfinder.js";
+import { tileHoverHandler, tileResetHandler, tileClickHandler } from "./pathfinderScripts.js";
 import { Tileset, Settings } from "./types/types";
 
 export function getRandomInt(max: number) {
@@ -76,12 +76,3 @@ export function returnEventListeners(tileset: Tileset, settings: Settings) {
     }
 }
 
-export function probeVictory(x, y, tileset: Tileset, settings: Settings) {
-
-    let sameblocks: number[] = [0, 0, 0, 0]
-
-    function inspectSingleTile(offsetX: number, offsetY: number) {
-
-    }
-
-}

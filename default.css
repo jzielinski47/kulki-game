@@ -59,7 +59,9 @@ body {
     height: 90%;
 }
 
-.waypoint {}
+.waypoint {
+    background: olive;
+}
 
 
 .path {

@@ -1,4 +1,4 @@
-import { sphereClickHandler } from "./pathfinder.js";
+import { sphereClickHandler } from "./pathfinderScripts.js";
 import { Sphere } from "./Sphere.js";
 import { Settings, Tileset } from "./types/types";
 

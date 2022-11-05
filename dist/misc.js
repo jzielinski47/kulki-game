@@ -1,4 +1,4 @@
-import { tileHoverHandler, tileResetHandler, tileClickHandler } from "./pathfinder.js";
+import { tileHoverHandler, tileResetHandler, tileClickHandler } from "./pathfinderScripts.js";
 export function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
