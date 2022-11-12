@@ -1,5 +1,5 @@
-import { sphereClickHandler } from "./pathfinderScripts.js";
-import { Sphere } from "./Sphere.js";
+import { sphereClickHandler } from "./pathfinderScripts";
+import { Sphere } from "./Sphere";
 import { Settings, Tileset } from "./types/types";
 
 export function renderSphere(x: number, y: number, color: string, tileset: Tileset, settings: Settings) {

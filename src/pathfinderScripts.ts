@@ -1,7 +1,7 @@
-import { colors } from "./main.js";
-import { checkAll4Neighbours, clearNums, getCords, getRandomInt, removeClassName, removeFromArray, returnEventListeners } from "./misc.js";
-import { renderSphere } from "./objectRenderer.js";
-import { Sphere } from "./Sphere.js";
+import { colors } from "./setup";
+import { checkAll4Neighbours, clearNums, getCords, getRandomInt, removeClassName, removeFromArray, returnEventListeners } from "./misc";
+import { renderSphere } from "./objectRenderer";
+import { Sphere } from "./Sphere";
 import { Settings, Tileset } from "./types/types";
 
 let localSphereMemory: string[] = []
