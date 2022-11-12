@@ -1,4 +1,4 @@
-import { tileHoverHandler, tileResetHandler, tileClickHandler } from "./pathfinderScripts.js";
+import { tileHoverHandler, tileResetHandler, tileClickHandler } from "./pathfinderScripts";
 import { Tileset, Settings } from "./types/types";
 
 export function getRandomInt(max: number) {

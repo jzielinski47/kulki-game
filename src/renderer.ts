@@ -1,6 +1,6 @@
-import { getRandomInt } from "./misc.js";
-import { renderSphere } from "./objectRenderer.js";
-import { tileClickHandler, tileHoverHandler, tileResetHandler } from "./pathfinderScripts.js";
+import { getRandomInt } from "./misc";
+import { renderSphere } from "./objectRenderer";
+import { tileClickHandler, tileHoverHandler, tileResetHandler } from "./pathfinderScripts";
 import { Tileset, Settings } from "./types/types";
 
 export function renderTileset(width: number, height: number) {
