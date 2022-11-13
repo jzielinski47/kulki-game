@@ -1,8 +1,14 @@
+interface SphereInt {
+    sphereClass: string;
+}
 
-export class Sphere {
+export class Sphere implements SphereInt {
 
-    private color: string;
-    private sphere: HTMLDivElement;
+    static sphereClass: string = 'sphere'
+
+    private readonly color: string;
+    protected sphere: HTMLDivElement;
+    sphereClass: string;
 
     constructor(color: string) {
         this.color = color;
@@ -11,7 +17,7 @@ export class Sphere {
 
     render = () => {
         this.sphere = document.createElement('div');
-        this.sphere.className = 'sphere';
+        this.sphere.className = this.sphereClass;
         this.sphere.style.background = this.color;
 
         return this.sphere;
