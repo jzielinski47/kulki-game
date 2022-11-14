@@ -10,3 +10,7 @@ export interface Settings {
 
 export type Tileset = string[][] | number[][]
 
+export interface SphereInt {
+    color: string;
+    sphere: HTMLDivElement;
+}
