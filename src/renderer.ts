@@ -3,6 +3,12 @@ import { renderSphere } from "./objectRenderer";
 import { tileClickHandler, tileHoverHandler, tileResetHandler } from "./pathfinderScripts";
 import { Tileset, Settings } from "./types/types";
 
+/**
+ * @param width - szerokosc planszy
+ * @param height - wysokosc planszy
+ * @returns tab: Tileset - tablica dwuwymiarowa [na ten moment posiada wyłącznie same zera]
+ */
+
 export function renderTileset(width: number, height: number) {
     let tab: Tileset = []
 
@@ -15,6 +21,13 @@ export function renderTileset(width: number, height: number) {
 
     return tab;
 }
+
+/**
+ * @param tileset - główna tablica dwuwymiarowa przechowująca dane o pozycji kulek
+ * @param settings - globalne ustawienia dla gry przechowujące standardowe wartości
+ * 
+ * @todo rednerDefaultSpheres - funkcja odpowiedzialna za wyrenderowanie (podanej z settings) ilości kulek na planszy na początku. [W naszym przypadku są to 3 kulki]
+ */
 
 export function renderDefaultSpheres(tileset: Tileset, settings: Settings) {
 
@@ -30,6 +43,14 @@ export function renderDefaultSpheres(tileset: Tileset, settings: Settings) {
 
     }
 }
+
+/**
+ * 
+ * @param tileset 
+ * @param settings 
+ * @param colors 
+ * @returns HTMLDivElement // funckja zwaraca container, który zawiera wyrenderowaną planszez kulkami oraz zwykłymi płytkami z eventlistenerami; tutaj znajdują się odniesienia do funkcji wykonywanych po kliknięciu na kulke lub pustą płytkę
+ */
 
 export function display(tileset: Tileset, settings: Settings, colors: string[]) {
     const container: HTMLDivElement = document.createElement('div')
